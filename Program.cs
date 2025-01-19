@@ -1,4 +1,4 @@
-using Carter;
+using Microsoft.AspNetCore.HttpOverrides;
 using redis_docker.Data;
 using redis_docker.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("InMemoryDatabase"); });
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
+    });
 
 builder
     .Services
@@ -21,18 +25,23 @@ builder
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+/*
+ Uncomment this if we want to have seed in memory data
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     DbInitializer.Seed(context);
 }
+*/
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.MapControllers();
 

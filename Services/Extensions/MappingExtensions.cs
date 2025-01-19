@@ -8,10 +8,10 @@ public  static class MappingExtensions
     public static List<EmployeeResponseModel> ConvertToEmployeeResponseModel(
         this List<Employee> employees)
     {
-      return  employees.Select(x => ConvertToEmployeeResponseModel(x)).ToList();
+      return  employees.Select(ConvertToEmployeeResponseModel).ToList();
     }
 
-    public static EmployeeResponseModel ConvertToEmployeeResponseModel(
+    private static EmployeeResponseModel ConvertToEmployeeResponseModel(
         this Employee employees)
     {
         return new EmployeeResponseModel()
