@@ -24,6 +24,5 @@ RUN dotnet publish "./redis-docker.csproj" -c $BUILD_CONFIGURATION -o /app/publi
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY --chmod=0755 entrypoint.sh /app/entrypoint.sh
 
 ENTRYPOINT ["dotnet", "redis-docker.dll"]

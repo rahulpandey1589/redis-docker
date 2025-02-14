@@ -12,7 +12,7 @@ services:
     networks:
       - redisnetwork
     volumes:
-      - redis-volumn:/var/opt/mssql
+      - sql-volumn:/var/opt/mssql
         
     
   api:
@@ -37,4 +37,5 @@ networks:
   redisnetwork:
 
 volumes:
-  redis-volumn:
+  sql-volumn:
+    external: true
