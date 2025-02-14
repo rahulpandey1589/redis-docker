@@ -11,10 +11,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
+
+
+var connectionstring =
+    builder.Configuration.GetConnectionString("DatabaseConnection") ??
+    Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
+        options.UseSqlServer(connectionstring);
     });
 
 builder
